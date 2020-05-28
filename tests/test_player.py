@@ -30,3 +30,32 @@ class TestPlayer(TestCase):
         )
 
         self.assertEqual(player.voted(), expected)
+
+    def test_have_voting_rights(self):
+        player = Player(
+            self.discord_account,
+            voting_rights=1,
+        )
+
+        self.assertTrue(player.has_voting_rights())
+
+    def test_vote(self):
+        player = Player(
+            self.discord_account,
+            voting_rights=1,
+        )
+
+        expected = Player(
+            self.discord_account,
+            voting_rights=0,
+        )
+
+        self.assertEqual(player.vote(), expected)
+
+    def test_vote_no_voting_rights(self):
+        player = Player(
+            self.discord_account,
+            voting_rights=0,
+        )
+
+        self.assertEqual(player.vote(), None)
