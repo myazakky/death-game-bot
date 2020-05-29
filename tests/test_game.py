@@ -39,3 +39,7 @@ class TestDeathDame(TestCase):
         expected = DeathGame([voter.vote(), voted_player.voted()])
 
         self.assertEqual(result, expected)
+
+    def test_vote_no_rights(self):
+
+        self.assertIsNone(self.game.vote(self.player, self.player))

@@ -9,6 +9,9 @@ class DeathGame:
         return DeathGame(self.player_list + [player])
 
     def vote(self, voter, voted_player):
+        if voter.has_voting_rights:
+            return None
+
         return DeathGame([
           voter.vote(),
           voted_player.voted()
