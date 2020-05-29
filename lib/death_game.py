@@ -1,3 +1,6 @@
+import discord
+
+
 class DeathGame:
     def __eq__(self, other):
         return self.player_list == other.player_list
@@ -29,3 +32,25 @@ class DeathGame:
             return None
 
         return self.player_list[discord_accounts.index(discord_account)]
+
+    def votes_ranking(self):
+        return sorted(
+            self.player_list,
+            key=lambda p: p.votes_count,
+            reverse=True
+        )
+
+    def embed_votes_ranking(self):
+        embed = discord.Embed(title='得票数ランキング')
+        ranking = self.votes_ranking()
+
+        for rank, player in enumerate(ranking):
+            if player.votes_count <= 0:
+                break
+
+            embed.add_field(
+                name=f'{rank + 1}位',
+                value=f'{player.discord_account.mention}: {player.votes_count}票'
+            )
+
+        return embed

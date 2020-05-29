@@ -15,6 +15,10 @@ class Game(commands.Cog):
 
         await ctx.channel.send('参加完了')
 
+    @commands.command()
+    async def ranking(self, ctx):
+        await ctx.channel.send('', embed=self.game.embed_votes_ranking())
+
 
 def setup(bot):
     bot.add_cog(Game(bot))
