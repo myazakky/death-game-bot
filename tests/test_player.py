@@ -82,3 +82,9 @@ class TestPlayer(TestCase):
         result = player.use_point(1)
 
         self.assertIsNone(result)
+
+    def test_add_voting_rights(self):
+        result = Player(self.discord_account).add_voting_rights(1)
+        expected = Player(self.discord_account, voting_rights=1)
+
+        self.assertEqual(result, expected)

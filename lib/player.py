@@ -52,3 +52,11 @@ class Player:
                 self.voting_rights,
                 self.point - point
             )
+
+    def add_voting_rights(self, number):
+        return Player(
+                self.discord_account,
+                self.votes_count,
+                self.voting_rights + number,
+                self.point
+            )
