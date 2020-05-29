@@ -18,10 +18,14 @@ class DeathGame:
         if not voter.has_voting_rights():
             return None
 
+        other_players = [
+            p for p in self.player_list if p != voter and p != voted_player
+        ]  # Remove voter and voted player.(投票者、被投票者を削除)
+
         return DeathGame([
           voter.vote(),
           voted_player.voted()
-        ])
+        ] + other_players)
 
     def player_by_discord(self, discord_account):
         discord_accounts = list(

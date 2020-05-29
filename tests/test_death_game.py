@@ -38,14 +38,14 @@ class TestDeathDame(TestCase):
         self.assertEqual(result, expected)
 
     def test_vote(self):
-        voter = Player(self.discord_account, voting_rights=1)
-        voted_player = Player(self.discord_account)
+        voter = Player(self.new_discord_user(0), voting_rights=1)
+        voted_player = Player(self.new_discord_user(1))
+        steve = Player(self.new_discord_user(2))
 
-        self.game.join(voter)
-        self.game.join(voted_player)
+        self.game = self.game.join(voter).join(voted_player).join(steve)
 
         result = self.game.vote(voter, voted_player)
-        expected = DeathGame([voter.vote(), voted_player.voted()])
+        expected = DeathGame([voter.vote(), voted_player.voted(), steve])
 
         self.assertEqual(result, expected)
 
