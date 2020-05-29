@@ -12,7 +12,7 @@ class Game(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        new_player = Player(ctx.author, voting_rights=1)
+        new_player = Player(ctx.author)
         self.game = self.game.join(new_player)
 
         await ctx.channel.send('参加完了')

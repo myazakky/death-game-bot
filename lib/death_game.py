@@ -12,9 +12,14 @@ class DeathGame:
         if self.player_by_discord(player.discord_account) is not None:
             return self
 
-        return DeathGame(self.player_list + [player])
+        return DeathGame(self.player_list + [
+            player.add_voting_rights(1).add_point(10)
+        ])
 
     def vote(self, voter, voted_player):
+        voter = self.player_by_discord(voter.discord_account)
+        voted_player = self.player_by_discord(voted_player.discord_account)
+
         if not voter.has_voting_rights():
             return None
 
