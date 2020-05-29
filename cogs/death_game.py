@@ -7,3 +7,9 @@ class DeathGame:
 
     def join(self, player):
         return DeathGame(self.player_list + [player])
+
+    def vote(self, voter, voted_player):
+        return DeathGame([
+          voter.vote(),
+          voted_player.voted()
+        ])
