@@ -59,3 +59,26 @@ class TestPlayer(TestCase):
         )
 
         self.assertEqual(player.vote(), None)
+
+    def test_add_point(self):
+        player = Player(self.discord_account)
+
+        expected = Player(self.discord_account, point=1)
+        result = player.add_point(1)
+
+        self.assertEqual(result, expected)
+
+    def test_use_point(self):
+        player = Player(self.discord_account, point=1)
+
+        expected = Player(self.discord_account, point=0)
+        result = player.use_point(1)
+
+        self.assertEqual(result, expected)
+
+    def test_use_point_when_not_enough(self):
+        player = Player(self.discord_account)
+
+        result = player.use_point(1)
+
+        self.assertIsNone(result)

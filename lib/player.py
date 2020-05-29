@@ -2,12 +2,20 @@ class Player:
     def __eq__(self, other):
         return (self.discord_account == other.discord_account and
                 self.votes_count == other.votes_count and
-                self.voting_rights == other.voting_rights)
+                self.voting_rights == other.voting_rights and
+                self.point == other.point)
 
-    def __init__(self, discord_account, votes_count=0, voting_rights=0):
+    def __init__(
+        self,
+        discord_account,
+        votes_count=0,
+        voting_rights=0,
+        point=0,
+    ):
         self.discord_account = discord_account
         self.votes_count = votes_count
         self.voting_rights = voting_rights
+        self.point = point
 
     def voted(self):
         return Player(
@@ -27,3 +35,20 @@ class Player:
           votes_count=self.votes_count,
           voting_rights=self.voting_rights - 1,
         )
+
+    def add_point(self, point):
+        return Player(
+            self.discord_account,
+            self.votes_count,
+            self.voting_rights,
+            self.point + point
+        )
+
+    def use_point(self, point):
+        if point <= self.point:
+            return Player(
+                self.discord_account,
+                self.votes_count,
+                self.voting_rights,
+                self.point - point
+            )
