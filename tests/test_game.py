@@ -1,7 +1,7 @@
 from unittest import TestCase
 import discord
-from cogs.death_game import DeathGame
-from cogs.player import Player
+from lib.death_game import DeathGame
+from lib.player import Player
 
 
 class TestDeathDame(TestCase):

@@ -1,6 +1,6 @@
 from unittest import TestCase
 import discord
-from cogs.player import Player
+from lib.player import Player
 
 
 class TestPlayer(TestCase):
