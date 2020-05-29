@@ -32,6 +32,16 @@ class DeathGame:
           voted_player.voted()
         ] + other_players)
 
+    def update_player(self, player, updated_player):
+        player = self.player_by_discord(player.discord_account)
+
+        if player is not None:
+            other_players = [
+                p for p in self.player_list if p != player
+            ]
+
+            return DeathGame([updated_player] + other_players)
+
     def player_by_discord(self, discord_account):
         discord_accounts = list(
             map(lambda p: p.discord_account, self.player_list)

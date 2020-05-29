@@ -60,6 +60,14 @@ class TestDeathDame(TestCase):
 
         self.assertIsNone(game.vote(self.player, self.player))
 
+    def test_update_player(self):
+        game = self.game.join(self.player)
+
+        result = game.update_player(self.player, self.player.add_point(1))
+        expected = DeathGame([self.player.add_point(1)])
+
+        self.assertEqual(result, expected)
+
     def test_player_by_discord(self):
         self.game = self.game.join(self.player)
 
