@@ -43,6 +43,27 @@ class Game(commands.Cog):
         await ctx.channel.send('投票しました。')
 
     @commands.command()
+    async def fake(
+        self,
+        ctx,
+        voted_discord_account: Union[discord.Member, discord.User]
+    ):
+        voter = self.game.player_by_discord(ctx.author)
+        voted_player = self.game.player_by_discord(voted_discord_account)
+
+        if not voter.has_fake_voting_rights():
+            await ctx.channel.send('嘘投票権がありません。')
+            return
+
+        if voted_player is None:
+            await ctx.channel.send('嘘投票先が見つかりませんでした。')
+            return
+
+        self.game = self.game.fake_vote(voter, voted_player)
+
+        await ctx.channel.send('嘘投票しました。')
+
+    @commands.command()
     async def more(self, ctx):
         buyer = self.game.player_by_discord(ctx.author)
 
@@ -53,6 +74,18 @@ class Game(commands.Cog):
         self.game = self.game.buy_voting_rights(buyer)
 
         await ctx.channel.send('投票権を付与しました。')
+
+    @commands.command()
+    async def more_fake(self, ctx):
+        buyer = self.game.player_by_discord(ctx.author)
+
+        if self.game.buy_fake_voting_rights(buyer) is None:
+            await ctx.channel.send('ポイントが不足しています。')
+            return
+
+        self.game = self.game.buy_fake_voting_rights(buyer)
+
+        await ctx.channel.send('嘘投票権を付与しました。')
 
     @commands.command()
     async def point(self, ctx):

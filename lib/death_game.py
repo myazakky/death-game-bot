@@ -30,6 +30,20 @@ class DeathGame:
             voted_player, voted_player.voted()
         )
 
+    def fake_vote(self, voter, voted_player):
+        voter = self.player_by_discord(voter.discord_account)
+
+        if not voter.has_fake_voting_rights():
+            return None
+
+        lost_voting_rights_game = self.update_player(voter, voter.fake_vote())
+        voted_player = lost_voting_rights_game.player_by_discord(
+            voted_player.discord_account
+        )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
+        return lost_voting_rights_game.update_player(
+            voted_player, voted_player.fake_voted()
+        )
+
     def buy_voting_rights(self, buyer):
         buyer = self.player_by_discord(buyer.discord_account)
 
@@ -37,6 +51,15 @@ class DeathGame:
             return self.update_player(
                 buyer,
                 buyer.use_point(10).add_voting_rights(1)
+            )
+
+    def buy_fake_voting_rights(self, buyer):
+        buyer = self.player_by_discord(buyer.discord_account)
+
+        if buyer.point >= 2:
+            return self.update_player(
+                buyer,
+                buyer.use_point(2).add_fake_voting_rights(1)
             )
 
     def update_player(self, player, updated_player):

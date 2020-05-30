@@ -61,11 +61,43 @@ class TestDeathDame(TestCase):
 
         self.assertIsNone(game.vote(self.player, self.player))
 
+    def test_fake_vote(self):
+        game = self.game.join(self.player.add_fake_voting_rights(1))
+
+        result = game.fake_vote(self.player, self.player)
+
+        expected = DeathGame([
+            Player(
+                self.discord_account,
+                point=10,
+                voting_rights=1,
+                fake_voting_rights=0,
+                votes_count=1,
+                fake_votes_count=1
+            )
+        ])
+
+        self.assertEqual(result, expected)
+
     def test_buy_voting_rights(self):
         game = self.game.join(self.player)
         result = game.buy_voting_rights(self.player)
         expected = DeathGame([
             Player(self.discord_account, point=0, voting_rights=2)
+        ])
+
+        self.assertEqual(result, expected)
+
+    def test_buy_fake_voting_rights(self):
+        game = self.game.join(self.player)
+        result = game.buy_fake_voting_rights(self.player)
+        expected = DeathGame([
+            Player(
+                self.discord_account,
+                point=8,
+                fake_voting_rights=1,
+                voting_rights=1
+            )
         ])
 
         self.assertEqual(result, expected)

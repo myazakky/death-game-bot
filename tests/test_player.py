@@ -62,6 +62,24 @@ class TestPlayer(TestCase):
 
         self.assertEqual(player.vote(), None)
 
+    def test_fake_vote(self):
+        player = Player(self.discord_account, fake_voting_rights=1)
+        result = player.fake_vote()
+        expected = Player(self.discord_account)
+
+        self.assertEqual(result, expected)
+
+    def test_fake_voted(self):
+        player = Player(self.discord_account)
+        result = player.fake_voted()
+        expected = Player(
+            self.discord_account,
+            votes_count=1,
+            fake_votes_count=1
+        )
+
+        self.assertEqual(result, expected)
+
     def test_add_point(self):
         player = Player(self.discord_account)
 
@@ -88,6 +106,12 @@ class TestPlayer(TestCase):
     def test_add_voting_rights(self):
         result = Player(self.discord_account).add_voting_rights(1)
         expected = Player(self.discord_account, voting_rights=1)
+
+        self.assertEqual(result, expected)
+
+    def test_add_fake_voting_rights(self):
+        result = Player(self.discord_account).add_fake_voting_rights(1)
+        expected = Player(self.discord_account, fake_voting_rights=1)
 
         self.assertEqual(result, expected)
 
