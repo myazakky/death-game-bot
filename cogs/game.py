@@ -59,6 +59,22 @@ class Game(commands.Cog):
         player = self.game.player_by_discord(ctx.author)
         await ctx.channel.send(f'{player.point}ポイント')
 
+    @commands.command()
+    async def status(self, ctx):
+        player = self.game.player_by_discord(ctx.author)
+
+        sent_message = f'''
+```
+得票数: {player.votes_count}
+嘘得票数: {player.fake_votes_count}
+投票権: {player.voting_rights}
+嘘投票権: {player.fake_voting_rights}
+ポイント: {player.point}
+```
+        '''
+
+        await ctx.channel.send(sent_message)
+
 
 def setup(bot):
     bot.add_cog(Game(bot))
