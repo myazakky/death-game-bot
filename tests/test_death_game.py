@@ -28,14 +28,14 @@ class TestDeathDame(TestCase):
     def test_join(self):
         result = self.game.join(self.player)
         expected = DeathGame(
-            [Player(self.discord_account, voting_rights=1, point=10)]
+            [Player(self.discord_account, voting_rights=1, fake_voting_rights=1, point=10)]
         )
 
         self.assertEqual(result, expected)
 
     def test_join_when_joined(self):
         result = self.game.join(self.player).join(self.player)
-        expected = DeathGame([self.player.add_voting_rights(1).add_point(10)])
+        expected = DeathGame([self.player.add_voting_rights(1).add_fake_voting_rights(1).add_point(10)])
 
         self.assertEqual(result, expected)
 
@@ -48,8 +48,8 @@ class TestDeathDame(TestCase):
         result = game.vote(voter, voted_player)
 
         expected = DeathGame([
-            Player(self.new_discord_user(1), voting_rights=1, votes_count=1, point=10),
-            Player(self.new_discord_user(0), voting_rights=0, votes_count=0, point=10)
+            Player(self.new_discord_user(1), voting_rights=1, fake_voting_rights=1, votes_count=1, point=10),
+            Player(self.new_discord_user(0), voting_rights=0, fake_voting_rights=1, votes_count=0, point=10)
             ])
 
         self.assertEqual(result, expected)
@@ -71,7 +71,7 @@ class TestDeathDame(TestCase):
                 self.discord_account,
                 point=10,
                 voting_rights=1,
-                fake_voting_rights=0,
+                fake_voting_rights=1,
                 votes_count=1,
                 fake_votes_count=1
             )
@@ -83,7 +83,7 @@ class TestDeathDame(TestCase):
         game = self.game.join(self.player)
         result = game.buy_voting_rights(self.player)
         expected = DeathGame([
-            Player(self.discord_account, point=0, voting_rights=2)
+            Player(self.discord_account, point=0, voting_rights=2, fake_voting_rights=1)
         ])
 
         self.assertEqual(result, expected)
@@ -95,8 +95,8 @@ class TestDeathDame(TestCase):
             Player(
                 self.discord_account,
                 point=8,
-                fake_voting_rights=1,
-                voting_rights=1
+                fake_voting_rights=2,
+                voting_rights=1,
             )
         ])
 
@@ -111,7 +111,7 @@ class TestDeathDame(TestCase):
 
         result = game.vote(common_player, first_place_player).go_to_tomorrow()
         expected = DeathGame([Player(
-            self.new_discord_user(2), voting_rights=1, point=10
+            self.new_discord_user(2), voting_rights=1, fake_voting_rights=1, point=10
         )])
 
         self.assertEqual(result, expected)
@@ -128,7 +128,7 @@ class TestDeathDame(TestCase):
         self.game = self.game.join(self.player)
 
         result = self.game.player_by_discord(self.discord_account)
-        self.assertEqual(result, self.player.add_voting_rights(1).add_point(10))
+        self.assertEqual(result, self.player.add_voting_rights(1).add_fake_voting_rights(1).add_point(10))
 
     def test_votes_ranking(self):
         voter = Player(self.new_discord_user(0))
@@ -139,8 +139,8 @@ class TestDeathDame(TestCase):
 
         ranking = game.votes_ranking()
         expected = [
-            voted_player.add_voting_rights(1).add_point(10).voted(),
-            voter.add_voting_rights(1).add_point(10).vote()
+            voted_player.add_voting_rights(1).add_fake_voting_rights(1).add_point(10).voted(),
+            voter.add_voting_rights(1).add_fake_voting_rights(1).add_point(10).vote()
         ]
 
         self.assertEqual(ranking, expected)

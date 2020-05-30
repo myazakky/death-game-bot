@@ -13,7 +13,7 @@ class DeathGame:
             return self
 
         return DeathGame(self.player_list + [
-            player.add_voting_rights(1).add_point(10)
+            player.add_voting_rights(1).add_fake_voting_rights(1).add_point(10)
         ])
 
     def leave(self, player):
@@ -83,6 +83,11 @@ class DeathGame:
             tomorrow_game = tomorrow_game.update_player(
                 player, player.add_voting_rights(1)
             )
+
+            if player.fake_voting_rights <= 0:
+                tomorrow_game = tomorrow_game.update_player(
+                    player, player.add_fake_voting_rights(1)
+                )
 
         return tomorrow_game
 
