@@ -16,6 +16,11 @@ class DeathGame:
             player.add_voting_rights(1).add_point(10)
         ])
 
+    def leave(self, player):
+        return DeathGame(
+            [p for p in self.player_list if p != player]
+        )
+
     def vote(self, voter, voted_player):
         voter = self.player_by_discord(voter.discord_account)
 
@@ -61,6 +66,25 @@ class DeathGame:
                 buyer,
                 buyer.use_point(2).add_fake_voting_rights(1)
             )
+
+    def go_to_tomorrow(self):
+        tomorrow_game = self
+
+        first_place_player = self.votes_ranking()[0]
+        players_didnt_vote = [
+            p for p in self.player_list if p.voting_rights > 0
+        ]
+        left_players = players_didnt_vote + [first_place_player]
+
+        for player in left_players:
+            tomorrow_game = tomorrow_game.leave(player)
+
+        for player in tomorrow_game.player_list:
+            tomorrow_game = tomorrow_game.update_player(
+                player, player.add_voting_rights(1)
+            )
+
+        return tomorrow_game
 
     def update_player(self, player, updated_player):
         player = self.player_by_discord(player.discord_account)

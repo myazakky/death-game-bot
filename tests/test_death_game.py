@@ -102,6 +102,20 @@ class TestDeathDame(TestCase):
 
         self.assertEqual(result, expected)
 
+    def test_go_to_tomorrow(self):
+        not_vote_player = Player(self.new_discord_user(0))
+        first_place_player = Player(self.new_discord_user(1))
+        common_player = Player(self.new_discord_user(2))
+
+        game = self.game.join(not_vote_player).join(first_place_player).join(common_player)
+
+        result = game.vote(common_player, first_place_player).go_to_tomorrow()
+        expected = DeathGame([Player(
+            self.new_discord_user(2), voting_rights=1, point=10
+        )])
+
+        self.assertEqual(result, expected)
+
     def test_update_player(self):
         game = self.game.join(self.player)
 
