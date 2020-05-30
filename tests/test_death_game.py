@@ -42,21 +42,22 @@ class TestDeathDame(TestCase):
     def test_vote(self):
         voter = Player(self.new_discord_user(0))
         voted_player = Player(self.new_discord_user(1))
-        steve = Player(self.new_discord_user(2))
 
-        self.game = self.game.join(voter).join(voted_player).join(steve)
+        game = self.game.join(voter).join(voted_player)
 
-        result = self.game.vote(voter, voted_player)
+        result = game.vote(voter, voted_player)
+
         expected = DeathGame([
-            voter.add_voting_rights(1).add_point(10).vote(),
-            voted_player.add_voting_rights(1).add_point(10).voted(),
-            steve.add_voting_rights(1).add_point(10)
-        ])
+            Player(self.new_discord_user(1), voting_rights=1, votes_count=1, point=10),
+            Player(self.new_discord_user(0), voting_rights=0, votes_count=0, point=10)
+            ])
 
         self.assertEqual(result, expected)
 
     def test_vote_no_rights(self):
-        game = self.game.join(self.player).vote(self.player, self.player)
+        game = self.game.join(self.player)
+
+        game = game.vote(self.player, self.player)
 
         self.assertIsNone(game.vote(self.player, self.player))
 

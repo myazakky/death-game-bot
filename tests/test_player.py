@@ -43,11 +43,13 @@ class TestPlayer(TestCase):
         player = Player(
             self.discord_account,
             voting_rights=1,
+            point=1
         )
 
         expected = Player(
             self.discord_account,
             voting_rights=0,
+            point=1
         )
 
         self.assertEqual(player.vote(), expected)
@@ -86,5 +88,22 @@ class TestPlayer(TestCase):
     def test_add_voting_rights(self):
         result = Player(self.discord_account).add_voting_rights(1)
         expected = Player(self.discord_account, voting_rights=1)
+
+        self.assertEqual(result, expected)
+
+    def test_update(self):
+        result = Player(
+            self.discord_account,
+            votes_count=1,
+            voting_rights=1,
+            point=1
+        ).update(point=0)
+
+        expected = Player(
+            self.discord_account,
+            votes_count=1,
+            voting_rights=1,
+            point=0
+        )
 
         self.assertEqual(result, expected)

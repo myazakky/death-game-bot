@@ -18,10 +18,7 @@ class Player:
         self.point = point
 
     def voted(self):
-        return Player(
-            self.discord_account,
-            votes_count=self.votes_count + 1,
-        )
+        return self.update(votes_count=self.votes_count + 1)
 
     def has_voting_rights(self):
         return self.voting_rights > 0
@@ -30,33 +27,22 @@ class Player:
         if not self.has_voting_rights():
             return None
 
-        return Player(
-          self.discord_account,
-          votes_count=self.votes_count,
-          voting_rights=self.voting_rights - 1,
-        )
+        return self.update(voting_rights=self.voting_rights - 1)
 
     def add_point(self, point):
-        return Player(
-            self.discord_account,
-            self.votes_count,
-            self.voting_rights,
-            self.point + point
-        )
+        return self.update(point=self.point + point)
 
     def use_point(self, point):
         if point <= self.point:
-            return Player(
-                self.discord_account,
-                self.votes_count,
-                self.voting_rights,
-                self.point - point
-            )
+            return self.update(point=self.point - point)
 
     def add_voting_rights(self, number):
+        return self.update(voting_rights=self.voting_rights + number)
+
+    def update(self, **status):
         return Player(
-                self.discord_account,
-                self.votes_count,
-                self.voting_rights + number,
-                self.point
-            )
+            status.get('discord_account', self.discord_account),
+            status.get('votes_count', self.votes_count),
+            status.get('voting_rights', self.voting_rights),
+            status.get('point', self.point)
+        )

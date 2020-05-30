@@ -18,19 +18,17 @@ class DeathGame:
 
     def vote(self, voter, voted_player):
         voter = self.player_by_discord(voter.discord_account)
-        voted_player = self.player_by_discord(voted_player.discord_account)
 
         if not voter.has_voting_rights():
             return None
 
-        other_players = [
-            p for p in self.player_list if p != voter and p != voted_player
-        ]  # Remove voter and voted player.(投票者、被投票者を削除)
-
-        return DeathGame([
-          voter.vote(),
-          voted_player.voted()
-        ] + other_players)
+        lost_voting_rights_game = self.update_player(voter, voter.vote())
+        voted_player = lost_voting_rights_game.player_by_discord(
+            voted_player.discord_account
+        )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
+        return lost_voting_rights_game.update_player(
+            voted_player, voted_player.voted()
+        )
 
     def update_player(self, player, updated_player):
         player = self.player_by_discord(player.discord_account)
