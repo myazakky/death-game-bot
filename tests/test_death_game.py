@@ -65,7 +65,7 @@ class TestDeathDame(TestCase):
         game = self.game.join(self.player)
         result = game.buy_voting_rights(self.player)
         expected = DeathGame([
-            Player(self.discord_account, point=8, voting_rights=2)
+            Player(self.discord_account, point=0, voting_rights=2)
         ])
 
         self.assertEqual(result, expected)

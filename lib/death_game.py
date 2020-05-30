@@ -33,10 +33,10 @@ class DeathGame:
     def buy_voting_rights(self, buyer):
         buyer = self.player_by_discord(buyer.discord_account)
 
-        if buyer.point >= 2:
+        if buyer.point >= 10:
             return self.update_player(
                 buyer,
-                buyer.use_point(2).add_voting_rights(1)
+                buyer.use_point(10).add_voting_rights(1)
             )
 
     def update_player(self, player, updated_player):
