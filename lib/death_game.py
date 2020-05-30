@@ -74,34 +74,51 @@ class DeathGame:
                 buyer.use_point(2).add_fake_voting_rights(1)
             )
 
-    def go_to_tomorrow(self):
-        tomorrow_game = self
-
+    def let_first_place_players_leave(self):
         most_votes_count = self.real_votes_ranking()[0].votes_count
 
         first_place_players = [
             p for p in self.player_list if p.votes_count - p.fake_votes_count == most_votes_count
         ]
 
-        players_didnt_vote = [
+        clear_game = self
+        for player in first_place_players:
+            clear_game = clear_game.leave(player)
+
+        return clear_game
+
+    def let_not_voted_players_leave(self):
+        not_voted_players = [
             p for p in self.player_list if p.voting_rights > 0
         ]
-        left_players = players_didnt_vote + first_place_players
 
-        for player in left_players:
-            tomorrow_game = tomorrow_game.leave(player)
+        voted_players_only_game = self
+        for player in not_voted_players:
+            voted_players_only_game = voted_players_only_game.leave(player)
 
-        for player in tomorrow_game.player_list:
-            tomorrow_game = tomorrow_game.update_player(
+        return voted_players_only_game
+
+    def initialize_players(self):
+        initialized_players_game = self
+
+        for player in self.player_list:
+            initialized_players_game = initialized_players_game.update_player(
                 player, player.add_voting_rights(1).update(
                     votes_count=0, fake_votes_count=0
                 )
             )
 
             if player.fake_voting_rights <= 0:
-                tomorrow_game = tomorrow_game.update_player(
+                initialized_players_game = initialized_players_game.update_player(
                     player, player.add_fake_voting_rights(1)
                 )
+
+        return initialized_players_game
+
+    def go_to_tomorrow(self):
+        tomorrow_game = self.let_first_place_players_leave(
+            ).let_not_voted_players_leave(
+            ).initialize_players()
 
         return tomorrow_game
 
