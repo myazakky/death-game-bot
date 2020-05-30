@@ -1,5 +1,7 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+import datetime
+import asyncio
 from lib.death_game import DeathGame
 from lib.player import Player
 from typing import Union
@@ -9,6 +11,13 @@ class Game(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.game = DeathGame()
+
+    async def setup(self):
+        now = datetime.datetime.now()
+        tomorrow = datetime.datetime(year=now.year, month=now.month, day=now.day + 1)
+
+        await asyncio.sleep(tomorrow.timestamp() - now.timestamp())
+        self.tomorrow.start()
 
     @commands.command()
     async def join(self, ctx):
@@ -107,6 +116,10 @@ class Game(commands.Cog):
         '''
 
         await ctx.channel.send(sent_message)
+
+    @tasks.loop(hours=24)
+    async def tomorrow(self):
+        self.game = self.game.go_to_tomorrow()
 
 
 def setup(bot):
