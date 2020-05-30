@@ -54,6 +54,11 @@ class Game(commands.Cog):
 
         await ctx.channel.send('投票権を付与しました。')
 
+    @commands.command()
+    async def point(self, ctx):
+        player = self.game.player_by_discord(ctx.author)
+        await ctx.channel.send(f'{player.point}ポイント')
+
 
 def setup(bot):
     bot.add_cog(Game(bot))
