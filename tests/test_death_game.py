@@ -139,10 +139,12 @@ class TestDeathDame(TestCase):
             first_place_player, first_place_player2
         ).fake_vote(
             first_place_player2, common_player
+        ).guess(
+            common_player, first_place_player
         ).go_to_tomorrow()
 
         expected = DeathGame([Player(
-            self.new_discord_user(3), voting_rights=1, fake_voting_rights=1, point=10
+            self.new_discord_user(3), voting_rights=1, fake_voting_rights=1, point=11
         )])
 
         self.assertEqual(result, expected)

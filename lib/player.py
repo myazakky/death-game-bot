@@ -1,6 +1,7 @@
 class Player:
     def __eq__(self, other):
-        return (self.discord_account == other.discord_account and
+        return (self.__class__ == other.__class__ and
+                self.discord_account == other.discord_account and
                 self.votes_count == other.votes_count and
                 self.fake_votes_count == other.fake_votes_count and
                 self.voting_rights == other.voting_rights and

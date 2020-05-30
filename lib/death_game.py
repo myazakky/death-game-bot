@@ -104,7 +104,7 @@ class DeathGame:
         for player in self.player_list:
             initialized_players_game = initialized_players_game.update_player(
                 player, player.add_voting_rights(1).update(
-                    votes_count=0, fake_votes_count=0
+                    votes_count=0, fake_votes_count=0, guessed=None
                 )
             )
 
@@ -115,8 +115,27 @@ class DeathGame:
 
         return initialized_players_game
 
+    def add_point_to_guessed_right(self):
+        most_votes_count = self.real_votes_ranking()[0].votes_count
+        first_place_accounts = [
+            p.discord_account for p in self.player_list if p.votes_count - p.fake_votes_count == most_votes_count
+        ]
+
+        added_game = self
+        for player in self.player_list:
+            if player.guessed is None:
+                continue
+
+            if player.guessed.discord_account in first_place_accounts:
+                added_game = added_game.update_player(
+                    player, player.add_point(1)
+                )
+
+        return added_game
+
     def go_to_tomorrow(self):
-        tomorrow_game = self.let_first_place_players_leave(
+        tomorrow_game = self.add_point_to_guessed_right(
+            ).let_first_place_players_leave(
             ).let_not_voted_players_leave(
             ).initialize_players()
 
