@@ -105,13 +105,29 @@ class TestDeathDame(TestCase):
     def test_go_to_tomorrow(self):
         not_vote_player = Player(self.new_discord_user(0))
         first_place_player = Player(self.new_discord_user(1))
-        common_player = Player(self.new_discord_user(2))
+        first_place_player2 = Player(self.new_discord_user(2))
+        common_player = Player(self.new_discord_user(3))
 
-        game = self.game.join(not_vote_player).join(first_place_player).join(common_player)
+        game = self.game.join(
+            not_vote_player
+        ).join(
+            first_place_player
+        ).join(
+            first_place_player2
+        ).join(
+            common_player
+        )
 
-        result = game.vote(common_player, first_place_player).go_to_tomorrow()
+        result = game.vote(
+            common_player, first_place_player
+        ).vote(
+            first_place_player, first_place_player2
+        ).fake_vote(
+            first_place_player2, common_player
+        ).go_to_tomorrow()
+
         expected = DeathGame([Player(
-            self.new_discord_user(2), voting_rights=1, fake_voting_rights=1, point=10
+            self.new_discord_user(3), voting_rights=1, fake_voting_rights=1, point=10
         )])
 
         self.assertEqual(result, expected)

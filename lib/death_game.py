@@ -70,18 +70,25 @@ class DeathGame:
     def go_to_tomorrow(self):
         tomorrow_game = self
 
-        first_place_player = self.votes_ranking()[0]
+        most_votes_count = self.real_votes_ranking()[0].votes_count
+
+        first_place_players = [
+            p for p in self.player_list if p.votes_count - p.fake_votes_count == most_votes_count
+        ]
+
         players_didnt_vote = [
             p for p in self.player_list if p.voting_rights > 0
         ]
-        left_players = players_didnt_vote + [first_place_player]
+        left_players = players_didnt_vote + first_place_players
 
         for player in left_players:
             tomorrow_game = tomorrow_game.leave(player)
 
         for player in tomorrow_game.player_list:
             tomorrow_game = tomorrow_game.update_player(
-                player, player.add_voting_rights(1)
+                player, player.add_voting_rights(1).update(
+                    votes_count=0, fake_votes_count=0
+                )
             )
 
             if player.fake_voting_rights <= 0:
@@ -115,6 +122,13 @@ class DeathGame:
         return sorted(
             self.player_list,
             key=lambda p: p.votes_count,
+            reverse=True
+        )
+
+    def real_votes_ranking(self):
+        return sorted(
+            self.player_list,
+            key=lambda p: p.votes_count - p.fake_votes_count,
             reverse=True
         )
 
