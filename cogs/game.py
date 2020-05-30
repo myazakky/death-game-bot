@@ -31,6 +31,17 @@ class Game(commands.Cog):
         await ctx.channel.send('', embed=self.game.embed_votes_ranking())
 
     @commands.command()
+    async def real(self, ctx):
+        buyer = self.game.player_by_discord(ctx.author)
+        if buyer.point < 2:
+            await ctx.channel.send('ポイントが不足しています。')
+            return
+
+        self.game = self.game.update_player(buyer, buyer.use_point(2))
+        embed_ranking = self.game.embed_real_votes_ranking()
+        await ctx.channel.send('', embed=embed_ranking)
+
+    @commands.command()
     async def vote(
         self,
         ctx,

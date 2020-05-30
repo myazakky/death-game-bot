@@ -146,3 +146,18 @@ class DeathGame:
             )
 
         return embed
+
+    def embed_real_votes_ranking(self):
+        embed = discord.Embed(title='本当の得票数ランキング')
+        ranking = self.real_votes_ranking()
+
+        for rank, player in enumerate(ranking):
+            if player.votes_count - player.fake_votes_count <= 0:
+                break
+
+            embed.add_field(
+                name=f'{rank + 1}位',
+                value=f'{player.discord_account.mention}: {player.votes_count - player.fake_votes_count}票'
+            )
+
+        return embed

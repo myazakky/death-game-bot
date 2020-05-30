@@ -175,3 +175,20 @@ class TestDeathDame(TestCase):
         result = game.embed_votes_ranking()
 
         self.assertEqual(expected._fields, result._fields)
+
+    def test_embed_real_votes_ranking(self):
+        fake_voter = Player(self.new_discord_user(0))
+        fake_voted_player = Player(self.new_discord_user(1))
+
+        game = self.game.join(fake_voter).join(fake_voted_player)
+        result = game.fake_vote(
+            fake_voter, fake_voted_player
+        ).vote(
+            fake_voted_player, fake_voter
+        ).embed_real_votes_ranking()
+
+        expected = discord.Embed(title='本当の投票数ランキング').add_field(
+            name='1位', value='<@0>: 1票'
+        )
+
+        self.assertEqual(expected._fields, result._fields)
