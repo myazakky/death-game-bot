@@ -21,6 +21,13 @@ class DeathGame:
             [p for p in self.player_list if p != player]
         )
 
+    def guess(self, guesser, target):
+        guesser = self.player_by_discord(guesser.discord_account)
+        target = self.player_by_discord(target.discord_account)
+
+        if guesser.guessed is None:
+            return self.update_player(guesser, guesser.guess(target))
+
     def vote(self, voter, voted_player):
         voter = self.player_by_discord(voter.discord_account)
 

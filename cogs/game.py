@@ -42,6 +42,18 @@ class Game(commands.Cog):
         await ctx.channel.send('', embed=embed_ranking)
 
     @commands.command()
+    async def guess(self, ctx, target: Union[discord.Member, discord.User]):
+        guesser = self.game.player_by_discord(ctx.author)
+        target = self.game.player_by_discord(target)
+
+        if guesser.guess(target) is None:
+            await ctx.channel.send('予想は1日１回までです。')
+            return
+
+        self.game = self.game.guess(guesser, target)
+        await ctx.channel.send('予想しました。')
+
+    @commands.command()
     async def vote(
         self,
         ctx,

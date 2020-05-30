@@ -5,7 +5,8 @@ class Player:
                 self.fake_votes_count == other.fake_votes_count and
                 self.voting_rights == other.voting_rights and
                 self.fake_voting_rights == other.fake_voting_rights and
-                self.point == other.point)
+                self.point == other.point and
+                self.guessed == other.guessed)
 
     def __init__(
         self,
@@ -15,6 +16,7 @@ class Player:
         voting_rights=0,
         fake_voting_rights=0,
         point=0,
+        guessed=None
     ):
         self.discord_account = discord_account
         self.votes_count = votes_count
@@ -22,6 +24,7 @@ class Player:
         self.voting_rights = voting_rights
         self.fake_voting_rights = fake_voting_rights
         self.point = point
+        self.guessed = guessed
 
     def voted(self):
         return self.update(votes_count=self.votes_count + 1)
@@ -49,6 +52,10 @@ class Player:
             fake_votes_count=self.fake_votes_count + 1
         )
 
+    def guess(self, target):
+        if self.guessed is None:
+            return self.update(guessed=target)
+
     def add_point(self, point):
         return self.update(point=self.point + point)
 
@@ -69,5 +76,6 @@ class Player:
             status.get('fake_votes_count', self.fake_votes_count),
             status.get('voting_rights', self.voting_rights),
             status.get('fake_voting_rights', self.fake_voting_rights),
-            status.get('point', self.point)
+            status.get('point', self.point),
+            status.get('guessed', self.guessed)
         )

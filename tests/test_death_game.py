@@ -61,6 +61,21 @@ class TestDeathDame(TestCase):
 
         self.assertIsNone(game.vote(self.player, self.player))
 
+    def test_guess(self):
+        guesser = Player(self.new_discord_user(0))
+        target = Player(self.new_discord_user(1))
+
+        game = self.game.join(guesser).join(target)
+        joined_target = Player(self.new_discord_user(1), voting_rights=1, fake_voting_rights=1, votes_count=0, point=10)
+
+        result = game.guess(guesser, target)
+        expected = DeathGame([
+            Player(self.new_discord_user(0), voting_rights=1, fake_voting_rights=1, point=10, guessed=joined_target),
+            joined_target
+        ])
+
+        self.assertEqual(result, expected)
+
     def test_fake_vote(self):
         game = self.game.join(self.player.add_fake_voting_rights(1))
 

@@ -115,6 +115,13 @@ class TestPlayer(TestCase):
 
         self.assertEqual(result, expected)
 
+    def test_guess(self):
+        target_player = Player(self.discord_account)
+        result = target_player.guess(target_player)
+        expected = Player(self.discord_account, guessed=target_player)
+
+        self.assertEqual(result, expected)
+
     def test_update(self):
         result = Player(
             self.discord_account,
