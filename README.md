@@ -2,6 +2,8 @@
 
 This bot manages death game on a discord server.
 
+respect https://github.com/sizumita/wolfserver
+
 ## Rule
 
 - 処刑される(BAN)の条件:
