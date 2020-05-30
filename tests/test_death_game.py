@@ -61,6 +61,15 @@ class TestDeathDame(TestCase):
 
         self.assertIsNone(game.vote(self.player, self.player))
 
+    def test_buy_voting_rights(self):
+        game = self.game.join(self.player)
+        result = game.buy_voting_rights(self.player)
+        expected = DeathGame([
+            Player(self.discord_account, point=8, voting_rights=2)
+        ])
+
+        self.assertEqual(result, expected)
+
     def test_update_player(self):
         game = self.game.join(self.player)
 

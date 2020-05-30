@@ -42,6 +42,18 @@ class Game(commands.Cog):
 
         await ctx.channel.send('投票しました。')
 
+    @commands.command()
+    async def more(self, ctx):
+        buyer = self.game.player_by_discord(ctx.author)
+
+        if self.game.buy_voting_rights(buyer) is None:
+            await ctx.channel.send('ポイントが不足しています。')
+            return
+
+        self.game = self.game.buy_voting_rights(buyer)
+
+        await ctx.channel.send('投票権を付与しました。')
+
 
 def setup(bot):
     bot.add_cog(Game(bot))
