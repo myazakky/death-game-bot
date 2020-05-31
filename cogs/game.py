@@ -127,6 +127,11 @@ class Game(commands.Cog):
     @commands.command()
     async def status(self, ctx):
         player = self.game.player_by_discord(ctx.author)
+        if player.guessed is None:
+            target = None
+        else:
+            target = player.guessed.discord_account.name
+
 
         sent_message = f'''
 ```
@@ -135,6 +140,7 @@ class Game(commands.Cog):
 投票権: {player.voting_rights}
 嘘投票権: {player.fake_voting_rights}
 ポイント: {player.point}
+予想: {target}
 ```
         '''
 
