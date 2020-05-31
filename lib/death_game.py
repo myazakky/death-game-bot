@@ -31,30 +31,26 @@ class DeathGame:
     def vote(self, voter, voted_player):
         voter = self.player_by_discord(voter.discord_account)
 
-        if not voter.has_voting_rights():
-            return None
-
-        lost_voting_rights_game = self.update_player(voter, voter.vote())
-        voted_player = lost_voting_rights_game.player_by_discord(
-            voted_player.discord_account
-        )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
-        return lost_voting_rights_game.update_player(
-            voted_player, voted_player.voted()
-        )
+        if voter.has_voting_rights():
+            lost_voting_rights_game = self.update_player(voter, voter.vote())
+            voted_player = lost_voting_rights_game.player_by_discord(
+                voted_player.discord_account
+            )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
+            return lost_voting_rights_game.update_player(
+                voted_player, voted_player.voted()
+            )
 
     def fake_vote(self, voter, voted_player):
         voter = self.player_by_discord(voter.discord_account)
 
-        if not voter.has_fake_voting_rights():
-            return None
-
-        lost_voting_rights_game = self.update_player(voter, voter.fake_vote())
-        voted_player = lost_voting_rights_game.player_by_discord(
-            voted_player.discord_account
-        )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
-        return lost_voting_rights_game.update_player(
-            voted_player, voted_player.fake_voted()
-        )
+        if voter.has_fake_voting_rights():
+            lost_voting_rights_game = self.update_player(voter, voter.fake_vote())
+            voted_player = lost_voting_rights_game.player_by_discord(
+                voted_player.discord_account
+            )  # 投票者と被投票者が同一人物だった場合も考慮して、このような処理にしている。
+            return lost_voting_rights_game.update_player(
+                voted_player, voted_player.fake_voted()
+            )
 
     def buy_voting_rights(self, buyer):
         buyer = self.player_by_discord(buyer.discord_account)
@@ -156,10 +152,8 @@ class DeathGame:
             map(lambda p: p.discord_account, self.player_list)
         )
 
-        if discord_account not in discord_accounts:
-            return None
-
-        return self.player_list[discord_accounts.index(discord_account)]
+        if discord_account in discord_accounts:
+            return self.player_list[discord_accounts.index(discord_account)]
 
     def votes_ranking(self):
         return sorted(

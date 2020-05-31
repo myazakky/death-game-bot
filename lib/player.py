@@ -37,16 +37,12 @@ class Player:
         return self.fake_voting_rights > 0
 
     def vote(self):
-        if not self.has_voting_rights():
-            return None
-
-        return self.update(voting_rights=self.voting_rights - 1)
+        if self.has_voting_rights():
+            return self.update(voting_rights=self.voting_rights - 1)
 
     def fake_vote(self):
-        if not self.has_fake_voting_rights():
-            return None
-
-        return self.update(fake_voting_rights=self.fake_voting_rights - 1)
+        if self.has_fake_voting_rights():
+            return self.update(fake_voting_rights=self.fake_voting_rights - 1)
 
     def fake_voted(self):
         return self.voted().update(
